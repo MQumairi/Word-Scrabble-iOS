@@ -57,10 +57,34 @@ class ViewController: UITableViewController {
     }
     
     func submit(_ answer: String) {
-        if isOriginal(answer.lowercased()) && isPossible(answer.lowercased()) && isReal(answer.lowercased()) {
+        
+        let isOriginalVar = isOriginal(answer.lowercased())
+        let isPossibleVar = isPossible(answer.lowercased())
+        let isRealVar = isReal(answer.lowercased())
+        
+        if isOriginalVar && isPossibleVar && isRealVar {
             usedWords.insert(answer.lowercased(), at: 0)
             tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+            return
         }
+        
+        var errorTitle: String = "Error"
+        
+        if(!isOriginalVar) {
+            errorTitle = "Word already used"
+        }
+        
+        if(!isPossibleVar) {
+            errorTitle = "Word is not possible from \(title!.lowercased())"
+        }
+        
+        if(!isRealVar) {
+            errorTitle = "Not a real world"
+        }
+        
+        let buttonAlert = UIAlertController(title: errorTitle, message: nil, preferredStyle: .alert)
+        buttonAlert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        present(buttonAlert, animated: true)
     }
     
     func isOriginal(_ word: String) -> Bool {
